@@ -35,3 +35,9 @@ div#contact div.contact-error input, div#contact div.contact-error select, div#c
 div#contact span.required{
   color: #BB0000;
 }
+
+div#contact div.form-errors ul li{
+  margin: 0;
+  padding: 5px;
+  color: darkred;
+}
