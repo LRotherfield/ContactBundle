@@ -11,6 +11,7 @@ use Rothers\ContactBundle\Entity\Contact;
 use Rothers\ContactBundle\Form\ContactType;
 use Rothers\ContactBundle\Utility\Useful;
 use JMS\SecurityExtraBundle\Annotation\Secure;
+use Symfony\Component\Form\FormError;
 
 /**
  * @Route("/contact")
@@ -39,11 +40,11 @@ class ClientController extends Controller {
             if ($form->isValid()) {
                 $save = true;
                 if (!$this->stripper($contact->getName())) {
-                    $form->addError("You must leave your name so we know who to contact.");
+                    $form->addError(new FormError("You must leave your name so we know who to contact."));
                     $save = false;
                 }
                 if (!$this->stripper($contact->getMessage())) {
-                    $form->addError("We want to hear from you but if you leave your message blank we wont hear anything.");
+                    $form->addError(new FormError("We want to hear from you but if you leave your message blank we wont hear anything."));
                     $save = false;
                 }
                 if ($save) {
