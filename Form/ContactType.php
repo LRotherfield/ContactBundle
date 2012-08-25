@@ -9,7 +9,7 @@ class ContactType extends AbstractType {
 
   public function buildForm(FormBuilder $builder, array $options) {
     $builder->add('title', 'entity', array(
-        'class' => 'RothersContactBundle:Title'
+        'class' => 'ContactBundle:Title'
     ));
     $builder->add('name', 'text');  
     $builder->add('email', 'email');
