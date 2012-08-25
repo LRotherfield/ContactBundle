@@ -1,0 +1,4 @@
+{% extends "ContactBundle::layout.html.twig" %}
+{% block body %}
+  {% include 'ContactBundle:Client:contact-form.html.twig' with {'form':form,'blank_layout':blank_layout} %}
+{% endblock %}

@@ -1,0 +1,77 @@
+<?php
+
+namespace Rothers\ContactBundle\Controller;
+
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Rothers\ContactBundle\Entity\Contact;
+use Rothers\ContactBundle\Form\ContactType;
+use Rothers\ContactBundle\Utility\Useful;
+
+/**
+ * @Route("/admin/contact")
+ */
+class AdminController extends Controller {
+
+  /**
+   * @Route("/delete/{id}", name="delete_contact")
+   * @Template
+   */
+  public function deleteAction($id) {
+    if ($this->getRequest()->getMethod() == 'POST') {
+      $contact = $this->getDoctrine()
+              ->getRepository('ContactBundle:Contact')
+              ->find($id);
+      if (!$contact)
+        throw $this->createNotFoundException('No contact found for id: #' . $id);
+      $form = $this->createDeleteForm($id);
+      $form->bindRequest($this->getRequest());
+      if ($form->isValid()) {
+        $em = $this->getDoctrine()->getEntityManager();
+        $em->remove($contact);
+        $em->flush();
+        $this->get('session')->setFlash('notice', 'Contact has been deleted');
+      }
+    }
+    return new RedirectResponse($this->generateUrl('show_contacts'));
+  }
+
+  /**
+   * @Route("/show/{id}", name="show_contact")
+   * @Template
+   */
+  public function showAction($id) {
+    $contact = $this->getDoctrine()->getRepository('ContactBundle:Contact')->find($id);
+    if (!$contact)
+      throw $this->createNotFoundException('No contact found for id: #' . $id);
+    return array('contact' => $contact);
+  }
+
+  /**
+   * @Route("/{page}", name="show_contacts", defaults={"page" = 1})
+   * @Template
+   */
+  public function indexAction(Request $request) {
+    $query = $this->getDoctrine()
+            ->getRepository('ContactBundle:Contact')
+            ->createQueryBuilder('c')
+            ->leftJoin('c.title', 't');
+    $query = $query->getQuery();
+    $contacts = $query->getResult();
+    foreach ($contacts as $contact)
+      $contact->setDeleteForm($this->createDeleteForm($contact->getId())->createView());
+    return array(
+        'contacts' => $contacts,
+    );
+  }
+
+  private function createDeleteForm($id) {
+    return $this->createFormBuilder(array('id' => $id))
+                    ->add('id', 'hidden')
+                    ->getForm();
+  }
+
+}

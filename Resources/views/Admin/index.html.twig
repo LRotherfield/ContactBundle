@@ -1,0 +1,28 @@
+{% extends "ContactBundle::layout.html.twig" %}
+{% block body %}
+  <h1>All Contact Form Enquiries</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for contact in contacts %}
+        <tr>
+          <td>{% if contact.title %}{{ contact.title.name }}{% endif %}{{ contact.name }}</td>
+          <td>{{ contact.email }}</td>
+          <td>
+            <a href="{{ path('show_contact', {'id':contact.id}) }}">Show</a>
+            <form action="{{ path('delete_contact', {'id':contact.id}) }}" method="post" {{ form_enctype(contact.deleteForm) }}
+              {{ form_widget(contact.deleteForm) }}
+              <input type="submit" value="delete" />
+            </form>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}
