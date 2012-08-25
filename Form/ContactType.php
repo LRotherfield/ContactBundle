@@ -13,8 +13,8 @@ class ContactType extends AbstractType {
     ));
     $builder->add('name', 'text');  
     $builder->add('email', 'email');
-    $builder->add('telephone', 'text');
-    $builder->add('company', 'text');
+    $builder->add('telephone', 'text', array('required' => false));
+    $builder->add('company', 'text', array('required' => false));
     $builder->add('message', 'textarea');
   }
 
