@@ -39,5 +39,6 @@ div#contact span.required{
 div#contact div.form-errors ul li{
   margin: 0;
   padding: 5px;
-  color: darkred;
+  color: #BB2222;
+  list-style: none;
 }
